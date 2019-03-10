@@ -111,7 +111,7 @@ All three method works and their result is indistinguishable. By looking at the 
 
 Conclusion: i use with the ListenPacket() solution as it is the simpler one.
 
-## Receive
+## Receiving
 
 Data can be received with a standard UDP server listening on the provided port:
 ```go
