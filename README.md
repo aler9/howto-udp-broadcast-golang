@@ -5,7 +5,7 @@ Sample code and instructions on how to send and receive UDP broadcast packets in
 
 ## Introduction
 
-A common method to trasmit informations to multiple devices consists in using the UDP transport layer and sending the packets to the broadcast address associated with the current LAN. The router will take care of propagating the packets to each connected device. There are at least two advantages with respect to normal network communication:
+A common method to trasmit informations to multiple devices connected to the same network consists in using the UDP transport layer and sending the packets to the network broadcast address. The router will take care of propagating the packets to each connected device. There are at least two advantages with respect to normal network communication:
 * transmission is much more efficient, as a single stream of data is used for communicating with multiple devices
 * it is not necessary to know in advance the addresses of the recipients
 
