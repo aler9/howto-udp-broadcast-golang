@@ -9,7 +9,7 @@ A common method to trasmit informations to multiple devices connected to the sam
 * transmission is much more efficient, as a single stream of data is used for communicating with multiple devices
 * it is not necessary to know in advance the addresses of the recipients
 
-The Go programming languages offers at least 3 ways to send UDP broadcast packets, the situation is not very clear and that's the reason why this guide is being written.
+The Go programming languages offers at least 4 ways to send UDP broadcast packets, the situation is not very clear and that's the reason why this guide is being written.
 
 ## Sending
 
@@ -105,11 +105,30 @@ func main() {
 }
 ```
 
-All three method works and their result is indistinguishable. By looking at the Go source code, it is possible to assert that:
+A fourth and shorter way consists in using the net.Dial() function if the local address / port don't matter:
+```go
+package main
+
+import "net"
+
+func main() {
+  conn, err := net.Dial("udp", "192.168.7.255:8829")
+  if err != nil {
+    panic(err)
+  }
+  defer conn.Close()
+  
+  _, err := conn.Write([]byte("data to transmit"))
+  if err != nil {
+    panic(err)
+  }
+```
+
+All four methods work and their result is indistinguishable. By looking at the Go source code, it is possible to assert that:
 * [net.ListenPacket()](https://golang.org/src/net/dial.go?s=19117:19219#L625) and [net.ListenUDP()](https://golang.org/src/net/udpsock.go?s=6961:7025#L221) use a nearly identical identical procedure, as they both call the same system functions, the only difference is that net.ListenPacket() converts the desired listen address (`:8829`) into an UDPAddr structure, while net.ListenUDP() requires directly an UDPAddr structure;
 * [net.DialUDP()](https://golang.org/src/net/udpsock.go?s=5929:5998#L195) uses a different route and also provides a Write() function to write directly to the broadcast address. This could be confusing, as Go always work with WriteTo() and ReadFrom() when dealing with UDP connections.
 
-Conclusion: i use with the ListenPacket() solution as it is the simpler one.
+Conclusion: I use with the ListenPacket() solution as it is the simpler one.
 
 ## Receiving
 
